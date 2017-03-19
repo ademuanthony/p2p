@@ -1,0 +1,120 @@
+﻿@model Peer2peer.Web.Models.Account.RegisterViewModel
+    @{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+@section Styles
+{
+    <link href="~/Views/Account/Login.css" rel="stylesheet" />
+    <style>
+        #LoginArea {
+            max-width: 850px !important;
+            margin: 20px auto 10px auto !important;
+        }
+    </style>
+}
+@section Scripts{
+    <script type="text/javascript" src="~/Views/Account/Register.js"></script>
+}
+<div class="container">
+    <div id="LoginArea" class="row">
+        <div class="col-lg-12">
+            <div class="well bs-component">
+                <form class="form-horizontal register-form" action="@(Url.Action("Register", "Account"))" method="POST">
+                    @Html.AntiForgeryToken()
+                    <fieldset>
+                        <legend>@L("Register")</legend>
+
+                        @if (@ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger">
+                                <i class="fa fa-warning"></i> @ViewBag.ErrorMessage
+                            </div>
+                        }
+
+                        @if (ViewBag.IsMultiTenancyEnabled)
+                        {
+                            <div class="form-group">
+                                <div class="col-lg-12">
+                                    <input type="text" class="form-control" name="TenancyName" placeholder="@L("TenancyName")" value="@Model.TenancyName" required maxlength="@Peer2peer.MultiTenancy.Tenant.MaxTenancyNameLength">
+                                </div>
+                            </div>
+                        }
+
+                        <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()"/>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" name="Name" value="@Model.Name" placeholder="@L("Name")" required maxlength="@Peer2peer.Users.User.MaxNameLength">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" name="Surname" value="@Model.Surname" placeholder="@L("Surname")" required maxlength="@Peer2peer.Users.User.MaxSurnameLength">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="email" class="form-control" name="EmailAddress" value="@Model.EmailAddress" placeholder="@L("EmailAddress")" required maxlength="@Peer2peer.Users.User.MaxEmailAddressLength">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber"
+                                           placeholder="Phone Number" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" name="UserName" value="@Model.UserName" placeholder="@L("UserName")" required maxlength="@Peer2peer.Users.User.MaxUserNameLength">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <input type="password" class="form-control" name="Password" placeholder="@L("Password")" required maxlength="@Peer2peer.Users.User.MaxPlainPasswordLength">
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <input type="text" class="form-control" name="BankName"
+                                           value="@Model.BankName" placeholder="Bank Name" required>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <input type="text" class="form-control" name="AccountName"
+                                           value="@Model.AccountName" placeholder="Account Name" required>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <input type="text" class="form-control" name="AccountNumber"
+                                           value="@Model.AccountNumber" placeholder="Account Number" required maxlength="10">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-4 col-lg-offset-2">
+                                    <button type="submit" id="RegisterButton" class="btn btn-primary"><i class="fa fa-sign-in"></i> @L("Register")</button>
+                                </div>
+                                <div class="col-lg-4 col-lg-offset-2">
+                                    <a href="@Url.Action("Login")" class="btn btn-success">
+                                        <i class="fa fa-sign-in"></i> @L("LogIn")
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Home"; //The menu item will be active for this page.
+}
+
+<div class="owl-slider-2 slider-wrapper">
+    <div class="poly-bg-1 hero-box font-inverse hero-box-smaller">
+        <div class="container clearfix">
+            <div class="col-md-4 img-holder wow fadeInUp">
+                <img src="~/Content/img/Naira-vs-Dollar-330x242.jpg" alt="">
+            </div>
+            <div class="col-md-8">
+                <h1 class="hero-heading wow fadeInDown" data-wow-duration="0.6s">Start Making Money</h1>
+                <p class="hero-text wow bounceInUp" data-wow-duration="0.9s" data-wow-delay="0.2s">
+                    Our members are making thousands in a matter of hours. Join a network that really pays
+                </p>
+                <a href="#" class="btn-outline-inverse hero-btn wow fadeInUp" 
+                   data-wow-delay="0.4s" title="Purchase Button">Register Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-box full-bg-9 font-inverse" data-top-bottom="background-position: 50% 0px;" data-bottom-top="background-position: 50% -600px;">
+        <div class="container">
+            <h1 class="hero-heading wow fadeInDown" data-wow-duration="0.6s">Give Help & Get Help</h1>
+            <p class="hero-text wow bounceInUp" data-wow-duration="0.9s" data-wow-delay="0.2s">
+                Give a helping Hand And get a Helping hand. Make money by helping someone with your spare money. Join the winning team
+            </p>
+            <a href="@Url.Action("Register", "Account")" class="btn title-button hero-btn btn-primary wow fadeInUp" 
+            data-wow-delay="0.4s" title="Purchase Button">Join now</a>
+        </div>
+        <div class="hero-overlay bg-black"></div>
+    </div>
+</div>
+
+<div class="large-padding pad25B">
+    <div class="container pad25B row">
+        <div class="col-md-3">
+            <div class="icon-box icon-box-offset-large bg-default content-box icon-boxed">
+                <i class="icon-large glyph-icon bg-white border-default btn-border icon-linecons-clock wow bounceInDown" data-wow-delay="1s"></i>
+                <h3 class="text-transform-upr icon-title wow fadeInUp">Donation 5000</h3>
+                <p class="icon-content wow fadeInUp">Donate 5000 and get 10000. Its that easy<br />
+                    <a class="btn btn-block btn-default" href="@Url.Action("Register", "Account")">Get Started</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="icon-box icon-box-offset-large bg-default content-box icon-boxed">
+                <i class="icon-large glyph-icon bg-white border-default btn-border icon-linecons-clock wow bounceInDown" data-wow-delay="1s"></i>
+                <h3 class="text-transform-upr icon-title wow fadeInUp">Donation 10000</h3>
+                <p class="icon-content wow fadeInUp">Donate 10000 and get 20000. Its that easy<br/>
+                    <a class="btn btn-block btn-primary" href="@Url.Action("Register", "Account")">Join Now</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="icon-box icon-box-offset-large bg-default content-box icon-boxed">
+                <i class="icon-large glyph-icon bg-white border-default btn-border icon-linecons-clock wow bounceInDown" data-wow-delay="1s"></i>
+                <h3 class="text-transform-upr icon-title wow fadeInUp">Donation 20000</h3>
+                <p class="icon-content wow fadeInUp">Donate 20000 and get 40000. Its that easy<br />
+                    <a class="btn btn-block btn-danger" href="@Url.Action("Register", "Account")">Register</a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="icon-box icon-box-offset-large bg-default content-box icon-boxed">
+                <i class="icon-large glyph-icon bg-white border-default btn-border icon-linecons-clock wow bounceInDown" data-wow-delay="1s"></i>
+                <h3 class="text-transform-upr icon-title wow fadeInUp">Donation 50000</h3>
+                <p class="icon-content wow fadeInUp">Donate 50000 and get 100000. Its that easy<br />
+                    <a class="btn btn-block btn-success" href="@Url.Action("Register", "Account")">Make The Move</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .hero-box-smaller .owl-pagination {
+        display: none;
+    }
+</style>
+
+<div class="cta-box-btn bg-yellow">
+    <div class="container">
+        <a href="@Url.Action("Register", "Account", new {area = ""})" class="btn btn-success" title="">
+            Join our team
+            <span>It takes less than 2 minutes to get everything set up.</span>
+        </a>
+    </div>
+</div>
+

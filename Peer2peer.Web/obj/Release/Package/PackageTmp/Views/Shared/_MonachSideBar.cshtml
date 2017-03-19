@@ -1,0 +1,37 @@
+﻿<div id="page-sidebar">
+    <div class="scroll-sidebar">
+
+        <ul id="sidebar-menu">
+        @*if this is an admin*@
+            <li class="header"><span>Administration</span></li>
+            <li>
+                <a href="/backbone" title="Admin Dashboard">
+                    <i class="glyph-icon icon-linecons-diamond"></i>
+                    <span>Admin dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Pending", "Packages", new {area = "Backbone"})" title="New Packages">
+                    <i class="glyph-icon icon-linecons-diamond"></i>
+                    <span>New Packages</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Confirmed", "Packages", new { area = "Backbone"})" title="Confirmed Packages">
+                    <i class="glyph-icon icon-linecons-diamond"></i>
+                    <span>Confirmed Packages</span>
+                </a>
+            </li>
+            <li class="divider"></li>
+
+            <li class="header"><span>Members Area</span></li>
+            <li>
+                <a href="/cp" title="Control Panel">
+                    <i class="glyph-icon icon-linecons-tv"></i>
+                    <span>Control Panel</span>
+                </a>
+            </li>
+        </ul><!-- #sidebar-menu -->
+
+    </div>
+</div>

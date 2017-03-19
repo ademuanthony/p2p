@@ -1,0 +1,62 @@
+﻿@model Peer2peer.Web.Models.Layout.UserMenuOrLoginLinkViewModel
+
+@using Peer2peer
+
+<div id="page-header" class="bg-gradient-9">
+    <div id="mobile-navigation">
+        <button id="nav-toggle" class="collapsed" data-toggle="collapse" data-target="#page-sidebar"><span></span></button>
+        <a href="/dashboard" class="logo-content-small" title="@AppContants.AppName"></a>
+    </div>
+    <div id="header-logo" class="logo-bg">
+        <a href="/dashboard" class="logo-content-big" title="@AppContants.AppName">
+            @AppContants.AppName
+            <span>@AppContants.AppSportLight</span>
+        </a>
+        <a href="index.html" class="logo-content-small" title="@AppContants.AppName">
+            @AppContants.AppName
+            <span>@AppContants.AppSportLight</span>
+        </a>
+        <a id="close-sidebar" href="#" title="Close sidebar">
+            <i class="glyph-icon icon-angle-left"></i>
+        </a>
+    </div>
+    <div id="header-nav-left">
+        <div class="user-account-btn dropdown">
+            <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown">
+                <img width="28" src="@Url.Content("~/Content/img/member.jpg")" alt="Profile image">
+                <span>@Model.GetShownLoginName()</span>
+                <i class="glyph-icon icon-angle-down"></i>
+            </a>
+            <div class="dropdown-menu float-left">
+                <div class="box-sm">
+                    <div class="login-box clearfix">
+                        <div class="user-info">
+                            <span>
+                                @Model.User.FullName
+                                <i>Member</i>
+                            </span>
+                            <a href="#" title="Edit profile">Edit profile</a>
+                            <a href="#" title="View notifications">View notifications</a>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="pad5A button-pane button-pane-alt text-center">
+                        <a href="@Url.Action("Logout", "Account", new {area = ""})" class="btn display-block font-normal btn-danger">
+                            <i class="glyph-icon icon-power-off"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- #header-nav-left -->
+    <div id="header-nav-right">
+        <a href="#" class="hdr-btn" id="fullscreen-btn" title="Fullscreen">
+            <i class="glyph-icon icon-arrows-alt"></i>
+        </a>
+
+        <a class="header-btn" id="logout-btn" href="@Url.Action("logout", "Account", new {area = ""})" title="Lockscreen page example">
+            <i class="glyph-icon icon-linecons-lock"></i>
+        </a>
+    </div><!-- #header-nav-right -->
+</div>

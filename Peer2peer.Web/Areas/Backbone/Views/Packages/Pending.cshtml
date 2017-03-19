@@ -1,0 +1,68 @@
+﻿@using Peer2peer
+@model List<Peer2peer.Package>
+
+@{
+    ViewBag.Title = "Pending Packages";
+}
+
+<div id="page-content-wrapper">
+    <div id="page-content">
+
+        <div class="container">
+
+            <div id="page-title">
+                <h2>Dashboard: <small>Packages</small></h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <h3 class="title-hero">
+                                Pending Packages
+                            </h3>
+                            <div class="example-box-wrapper">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Phone</th>
+                                            <th>Benefitiary</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                    @{ var sn = 1;}
+                                    @foreach (var package in (List<Package>)Model)
+                                    {
+                                        <form action="pair" method="post">
+                                            <input type="hidden" name="packageId" value="@package.Id"/>
+                                            <tr>
+                                                <td>@(sn++)</td>
+                                                <td>@package.User.Name</td>
+                                                <td>@package.CreatedDate.ToShortDateString()</td>
+                                                <td>@package.Type.Price</td>
+                                                <td>@package.User.PhoneNumber</td>
+                                                <td><input name="toUserId" class="form-control"/></td>
+                                                <td><button class="btn btn-block btn-primary" type="submit">Pair</button></td>
+                                            </tr>
+                                        </form>
+                                        
+                                    }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

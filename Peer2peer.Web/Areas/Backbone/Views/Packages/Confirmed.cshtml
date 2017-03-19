@@ -1,0 +1,61 @@
+﻿@model Abp.Application.Services.Dto.PagedResultDto<Peer2peer.Peering.Dto.PackageWithTicket>
+@{
+    ViewBag.Title = "Confimred";
+}
+
+<div id="page-content-wrapper">
+    <div id="page-content">
+
+        <div class="container">
+
+            <div id="page-title">
+                <h2>Dashboard: <small>Packages</small></h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <h3 class="title-hero">
+                                Pending Packages
+                            </h3>
+                            <div class="example-box-wrapper">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Phone</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{ var sn = 1;}
+                                        @foreach (var package in Model.Items)
+                                        {
+                                            <tr>
+                                                <td>@(sn++)</td>
+                                                <td>@package.Name</td>
+                                                <td>@package.DateCreated.ToShortDateString()</td>
+                                                <td>@package.Amount</td>
+                                                <td>@package.PhoneNumber</td>
+                                                <td><a href="@Url.Action("Match", new {packageId = package.PackageId})" class="btn btn-block btn-primary">Pair</a></td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

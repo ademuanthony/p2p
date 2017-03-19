@@ -1,0 +1,73 @@
+﻿@using Abp.Collections.Extensions
+@using Peer2peer.Web.Views
+@model Peer2peer.Web.Models.Layout.TopMenuViewModel
+@{
+    var calculateMenuUrl = new Func<string, string>((url) =>
+    {
+        if (string.IsNullOrEmpty(url))
+        {
+            return ApplicationPath;
+        }
+
+        if (UrlChecker.IsRooted(url))
+        {
+            return url;
+        }
+
+        return ApplicationPath + url;
+    });
+}
+
+<div id="page-sidebar">
+    <div class="scroll-sidebar">
+
+        <ul id="sidebar-menu">
+            @*if this is an admin*@
+            <li class="header"><span>Navigation Menu</span></li>
+        
+
+            @foreach (var menuItem in Model.MainMenu.Items)
+            {
+                <li class="@(Model.ActiveMenuItemName == menuItem.Name ? "active" : "")">
+                    @if (menuItem.Items.IsNullOrEmpty())
+                    {
+                        <a href="@calculateMenuUrl(menuItem.Url)" title="@menuItem.DisplayName">
+                            @if (!string.IsNullOrWhiteSpace(menuItem.Icon))
+                            {
+                                <i class="@menuItem.Icon"></i>
+                            }
+                            <span>@menuItem.DisplayName</span>
+                        </a>
+                        
+                    }
+                    else
+                    {
+                        <a href="" data-toggle="dropdown">
+                            @if (!string.IsNullOrWhiteSpace(menuItem.Icon))
+                            {
+                                <i class="@menuItem.Icon"></i>
+                            }
+                            <span>@menuItem.DisplayName</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach (var subMenuItem in menuItem.Items)
+                            {
+                                <li>
+                                    <a href="@calculateMenuUrl(subMenuItem.Url)">
+                                        @if (!string.IsNullOrWhiteSpace(subMenuItem.Icon))
+                                        {
+                                            <i class="@subMenuItem.Icon"></i>
+                                        }
+                                        <span>@subMenuItem.DisplayName</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+
+        </ul><!-- #sidebar-menu -->
+
+    </div>
+</div>
