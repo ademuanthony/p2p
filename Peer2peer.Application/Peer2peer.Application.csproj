@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationService.cs" />
     <Compile Include="Dto\OutputResultDto.cs" />
     <Compile Include="Peer2peerApplicationModule.cs" />
     <Compile Include="Peer2peerAppServiceBase.cs" />

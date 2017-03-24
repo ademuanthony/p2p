@@ -35,6 +35,8 @@ namespace Peer2peer.Peering
 
         PagedResultDto<PackageWithTicket> GetPackageWithTickets(PagedResultRequestDto input);
 
+        OutputResultDto<Package> GetNextPachageToMatch();
+
         OutputResultDto MatchPackage(MatchPackageInput input);
     }
 
@@ -59,6 +61,7 @@ namespace Peer2peer.Peering
             _sessionAppService = sessionService;
         }
 
+        [UnitOfWork(IsDisabled = true)]
         public OutputResultDto BuyPackage(BuyPackageInput input)
         {
             if (_packageRepository.GetAll().Any(p => p.UserId == input.UserId && p.Status == Status.Pending))
@@ -85,6 +88,13 @@ namespace Peer2peer.Peering
 
             _packageRepository.Insert(package);
 
+            //create donation for this ticket
+            var packageToMatchResult = GetNextPachageToMatch();
+            if (packageToMatchResult.Success)
+            {
+                var packageToMatch = packageToMatchResult.Data;
+                MatchPackage(new MatchPackageInput {PackageId = packageToMatch.Id});
+            }
             return new OutputResultDto {Message = "Package created", Success = true};
         }
 
@@ -245,10 +255,29 @@ namespace Peer2peer.Peering
             return new PagedResultDto<PackageWithTicket>(count, list);
         }
 
+        public OutputResultDto<Package> GetNextPachageToMatch()
+        {
+            try
+            {
+                var package =
+                _packageRepository
+                    .GetAll().OrderBy(p=>p.CreatedDate)
+                    .FirstOrDefault(p => p.Status == Status.TicketsCreated &&
+                                         p.Tickets.Any(t => t.Status == Status.Pending ||
+                                                            t.Status == Status.UrgentPairingNeeded));
+                return new OutputResultDto<Package> { Data = package, Success = true };
+            }
+            catch (Exception exception)
+            {
+                return new OutputResultDto<Package> {Success = false, Message = exception.Message};
+            }
+            
+        }
+
         public OutputResultDto MatchPackage(MatchPackageInput input)
         {
-            var package = _packageRepository.FirstOrDefault(p => p.Id == input.PackageId);
-            if (package == null) return new OutputResultDto {Message = "Invalid package Id"};
+            var receptorPackage = _packageRepository.FirstOrDefault(p => p.Id == input.PackageId);
+            if (receptorPackage == null) return new OutputResultDto {Message = "Invalid package Id"};
             var tickets = _ticketRepository.GetAllList(t => t.PackageId == input.PackageId &&
                                                             (t.Status == Status.Pending ||
                                                              t.Status == Status.UrgentPairingNeeded));
@@ -261,10 +290,10 @@ namespace Peer2peer.Peering
 
             foreach (var ticket in tickets)
             {
-                var pendingPackage = _packageRepository.FirstOrDefault(p => p.Status == Status.Pending);// pendingPackages[i++];
+                var donorPackage = _packageRepository.FirstOrDefault(p => p.Status == Status.Pending && p.TypeId == receptorPackage.TypeId);// pendingPackages[i++];
                 //if the ticket has donation. continue
                 if(ticket.DonationId.HasValue) continue;
-                var result = CreateDonation(new CreateDonationInput {PackageId = pendingPackage.Id, TicketId = ticket.Id});
+                var result = CreateDonation(new CreateDonationInput {PackageId = donorPackage.Id, TicketId = ticket.Id});
                 if (result.Success) donationsCount++;
             }
             return new OutputResultDto
