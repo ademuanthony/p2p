@@ -57,5 +57,7 @@
     <text name="ControlPanel" value="Control Panel"/>
     <text name="NewPackages" value="New Packages"/>
     <text name="ComfirmedPackages" value="Comfirmed Packages"/>
+  
+    <text name="Profile" value="Profile"/>
   </texts>
 </localizationDictionary>

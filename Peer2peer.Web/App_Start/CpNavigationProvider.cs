@@ -30,6 +30,15 @@ namespace Peer2peer.Web
                         icon: "glyph-icon icon-linecons-tv",
                         requiresAuthentication: true
                         )
+                )
+                .AddItem(
+                    new MenuItemDefinition(
+                        "Profile",
+                        L("Profile"),
+                        url: "cp/profile",
+                        icon: "glyph-icon icon-user",
+                        requiresAuthentication: true
+                        )
                 ).AddItem(
                     new MenuItemDefinition(
                         "New Packages",
