@@ -10,9 +10,11 @@ using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.Configuration.Startup;
+using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Threading;
+using Abp.Timing;
 using Abp.UI;
 using Abp.Web.Models;
 using Peer2peer.Authorization;
@@ -35,7 +37,10 @@ namespace Peer2peer.Web.Controllers
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly LogInManager _logInManager;
-        private IUserAppService _userService;
+        private readonly IRepository<User, long> _userRepository;
+        private readonly IRepository<Referral> _referralRepository;
+        private readonly IRepository<PackageType> _packageTypeRepository;
+        private readonly IRepository<Package> _packageRepository;
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -52,7 +57,9 @@ namespace Peer2peer.Web.Controllers
             IUnitOfWorkManager unitOfWorkManager,
             IMultiTenancyConfig multiTenancyConfig,
             LogInManager logInManager,
-            IUserAppService userService)
+            IRepository<User, long> userRepository,
+            IRepository<Referral> referralRepository, IRepository<PackageType> packageTypeRepository, 
+            IRepository<Package> packageRepository )
         {
             _tenantManager = tenantManager;
             _userManager = userManager;
@@ -60,7 +67,10 @@ namespace Peer2peer.Web.Controllers
             _unitOfWorkManager = unitOfWorkManager;
             _multiTenancyConfig = multiTenancyConfig;
             _logInManager = logInManager;
-            _userService = userService;
+            _userRepository = userRepository;
+            _referralRepository = referralRepository;
+            _packageRepository = packageRepository;
+            _packageTypeRepository = packageTypeRepository;
         }
 
         #region Login / Logout
@@ -164,9 +174,9 @@ namespace Peer2peer.Web.Controllers
 
         #region Register
 
-        public ActionResult Register()
+        public ActionResult Register(string r = "")
         {
-            return RegisterView(new RegisterViewModel());
+            return RegisterView(new RegisterViewModel {ReferalCode = r});
         }
 
         private ActionResult RegisterView(RegisterViewModel model)
@@ -196,6 +206,11 @@ namespace Peer2peer.Web.Controllers
 
                 var tenant = await GetActiveTenantAsync(model.TenancyName);
 
+                var sponsor = _userRepository.FirstOrDefault(u => u.UserName == model.ReferalCode);
+                if (sponsor == null)
+                {
+                    throw new UserFriendlyException("Invalid Sponsorship Code");
+                }
                 //Create user
                 var user = new User
                 {
@@ -270,6 +285,15 @@ namespace Peer2peer.Web.Controllers
                 CheckErrors(await _userManager.CreateAsync(user));
                 await _unitOfWorkManager.Current.SaveChangesAsync();
 
+                //record referal info
+                var referral = new Referral
+                {
+                    DownlineId = user.Id,
+                    UserId = sponsor.Id
+                };
+                _referralRepository.Insert(referral);
+
+
                 //Directly login if possible
                 if (user.IsActive)
                 {
@@ -286,6 +310,8 @@ namespace Peer2peer.Web.Controllers
                     if (loginResult.Result == AbpLoginResultType.Success)
                     {
                         await SignInAsync(loginResult.User, loginResult.Identity);
+                        //subscribe the user to package
+                        CreatePackage(PackageType.Silver);
                         return Redirect(Url.Action("Index", "Dashboard", new {area = "Cp"}));
                     }
 
@@ -309,6 +335,30 @@ namespace Peer2peer.Web.Controllers
 
                 return View("Register", model);
             }
+        }
+
+        private void CreatePackage(string name)
+        {
+            var packageType = _packageTypeRepository.FirstOrDefault(p => p.Name == name.ToLower());
+
+            if (packageType == null)
+            {
+                FlashError("Invalid package selected");
+                return;
+            }
+
+            var package = new Package
+            {
+                UserId = AbpSession.UserId.Value,
+                ExpectedRi = packageType.ReturnOnInvestment,
+                CurrentRi = 0,
+                TypeId = packageType.Id,
+                Status = Status.Pending,
+                CreatedDate = Clock.Now
+            };
+
+            _packageRepository.Insert(package);
+            FlashSuccess("Your package have been added. Please wait to be paired");
         }
 
         #endregion

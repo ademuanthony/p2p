@@ -54,3 +54,4 @@ C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Release\Peer2peer.Migr
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Release\Peer2peer.EntityFramework.csproj.GenerateResource.Cache
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Release\Peer2peer.EntityFramework.dll
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Release\Peer2peer.EntityFramework.pdb
+C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Release\Peer2peer.Migrations.RewardTicket.resources

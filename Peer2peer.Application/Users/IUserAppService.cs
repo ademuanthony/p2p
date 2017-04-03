@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Microsoft.AspNet.Identity;
 using Peer2peer.Users.Dto;
 
 namespace Peer2peer.Users
@@ -16,5 +17,9 @@ namespace Peer2peer.Users
         Task<User> GetUser(long id);
 
         Task CreateUser(CreateUserInput input);
+
+        Task<IdentityResult> ChangePassword(string currentPassword, string newPassword);
+
+        Task<IdentityResult> UpdateUser(User user);
     }
 }

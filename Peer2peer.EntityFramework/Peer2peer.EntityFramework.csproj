@@ -121,6 +121,7 @@
     <Compile Include="EntityFramework\Repositories\DonationRepository.cs" />
     <Compile Include="EntityFramework\Peer2peerDbContext.cs" />
     <Compile Include="EntityFramework\Repositories\Peer2peerRepositoryBase.cs" />
+    <Compile Include="EntityFramework\Repositories\RewardDonationRepository.cs" />
     <Compile Include="Migrations\201701271145151_AbpZero_Initial.cs" />
     <Compile Include="Migrations\201701271145151_AbpZero_Initial.Designer.cs">
       <DependentUpon>201701271145151_AbpZero_Initial.cs</DependentUpon>
@@ -152,6 +153,10 @@
     <Compile Include="Migrations\201703190814256_DonationPackageId.cs" />
     <Compile Include="Migrations\201703190814256_DonationPackageId.Designer.cs">
       <DependentUpon>201703190814256_DonationPackageId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704021730342_RewardTicket.cs" />
+    <Compile Include="Migrations\201704021730342_RewardTicket.Designer.cs">
+      <DependentUpon>201704021730342_RewardTicket.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AbpZeroDbMigrator.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -200,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703190814256_DonationPackageId.resx">
       <DependentUpon>201703190814256_DonationPackageId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704021730342_RewardTicket.resx">
+      <DependentUpon>201704021730342_RewardTicket.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

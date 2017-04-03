@@ -898,6 +898,7 @@
     <Content Include="Areas\Backbone\Views\Packages\Confirmed.cshtml" />
     <Content Include="Areas\Cp\Views\Profile\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
+    <None Include="Properties\PublishProfiles\filesystem.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Timing;
 using Peer2peer.Peering;
@@ -30,11 +31,12 @@ namespace Peer2peer.Web.Areas.Cp.Controllers
             return RedirectToAction("Index", "Dashboard", new { area = "Cp" });
         }
 
+        [AbpAuthorize]
         public ActionResult Create(string id)
         {
             if (_packageRepository.GetAll().Any(p => p.UserId == AbpSession.UserId.Value && p.Status == Status.Pending))
             {
-                FlashError("Please waiting for your current circle to be completed");
+                FlashError("Please wait for your current circle to be completed");
                 return RedirectToAction("Index", "Dashboard");
             }
             var name = id;
@@ -61,24 +63,25 @@ namespace Peer2peer.Web.Areas.Cp.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
-        public ActionResult Confirm(int donationId)
+        public ActionResult Confirm(int donationId, string t = "p")
         {
             var result = _donationService.ConfirmDonation(new ConfirmDonationInput {DonationId = donationId,
-                CurrentUserId = AbpSession.UserId.Value
+                CurrentUserId = AbpSession.UserId.Value, Type = t
             });
             if(result.Success) FlashSuccess(result.Message);
             else FlashError(result.Message);
             return RedirectToAction("Index", "Dashboard", new {area = "Cp"});
         }
 
-        public ActionResult ChangeStatus(int donationId, string status = Status.AwaitingAlert)
+        public ActionResult ChangeStatus(int donationId, string status = Status.AwaitingAlert, string t = "p")
         {
             var result =
                 _donationService.ChangeDonationStatus(new ChangeDonationStatusInput
                 {
                     DonationId = donationId,
                     Status = status,
-                    CurrentUserId = AbpSession.UserId.Value
+                    CurrentUserId = AbpSession.UserId.Value,
+                    Type = t
                 });
             if (result.Success) FlashSuccess(result.Message);
             else FlashError(result.Message);

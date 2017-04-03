@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Peer2peer
 {
-    public class AppContants
+    public class AppConstants
     {
-        public const string AppName = "Peer 2 Peer";
+        public const string AppName = "Help 2 Get Help";
 
         public const string AppSportLight = "The perfect way out of poverty";
     }

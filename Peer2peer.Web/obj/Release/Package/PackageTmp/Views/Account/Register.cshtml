@@ -1,6 +1,7 @@
 ﻿@model Peer2peer.Web.Models.Account.RegisterViewModel
     @{
         Layout = "~/Views/Shared/_Layout.cshtml";
+        ViewBag.Title = "Join And Make Money";
     }
 @section Styles
 {
@@ -41,11 +42,22 @@
                         }
 
                         <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()"/>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Referral Code</label>
+                                    <input class="form-control" value="@Model.ReferalCode" name="ReferalCode" placeholder="Referral Code" required/>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" name="Name" value="@Model.Name" placeholder="@L("Name")" required maxlength="@Peer2peer.Users.User.MaxNameLength">
+                                    <input type="text" class="form-control" name="Name" 
+                                           value="@Model.Name" placeholder="@L("Name")" required 
+                                           maxlength="@Peer2peer.Users.User.MaxNameLength">
                                 </div>
 
                                 <div class="col-lg-6">

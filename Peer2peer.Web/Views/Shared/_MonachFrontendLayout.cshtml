@@ -18,7 +18,7 @@
     </style>
     <meta charset="UTF-8">
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
-    <title> @ViewBag.Title | @AppContants.AppName </title>
+    <title> @ViewBag.Title | @AppConstants.AppName </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Favicons -->
@@ -80,7 +80,7 @@
         <div class="main-header wow fadeInDown bg-blue font-inverse">
             <div class="container">
                 <a href="@Url.Action("Index", "Home", new {area = ""})" class="header-logo" 
-                   title="Home Page">@AppContants.AppName</a><!-- .header-logo -->
+                   title="Home Page">@AppConstants.AppName</a><!-- .header-logo -->
                 
                 <ul class="header-nav collapse">
                     <li>
@@ -108,7 +108,7 @@
         <div class="main-footer bg-gradient-4 clearfix">
             <div class="footer-pane">
                 <div class="container clearfix">
-                    <div class="logo">&copy; @Clock.Now.Year @AppContants.AppName. All Rights Reserved.</div>
+                    <div class="logo">&copy; @Clock.Now.Year @AppConstants.AppName. All Rights Reserved.</div>
                     <div class="footer-nav-bottom">
                         <a href="@Url.Action("Index", "Home")" title="Home">Home Page</a>
                         <a href="#" title="Layout">How It Works</a>

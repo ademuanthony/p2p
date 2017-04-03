@@ -62,5 +62,19 @@ namespace Peer2peer.Users
 
             CheckErrors(await UserManager.CreateAsync(user));
         }
+
+        [AbpAuthorize]
+        public async Task<IdentityResult> ChangePassword(string currentPassword, string newPassword)
+        {
+            var result = await UserManager.ChangePasswordAsync(AbpSession.UserId.Value, currentPassword, newPassword);
+            return result;
+        }
+
+        [AbpAuthorize]
+        public async Task<IdentityResult> UpdateUser(User user)
+        {
+            var result = await UserManager.UpdateAsync(user);
+            return result;
+        }
     }
 }

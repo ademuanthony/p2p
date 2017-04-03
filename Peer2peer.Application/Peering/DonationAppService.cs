@@ -47,18 +47,22 @@ namespace Peer2peer.Peering
         private readonly IRepository<DonationTicket> _ticketRepository;
         private readonly IDonationRepository _donationRepository;
         private readonly IRepository<User, long> _userRepository;
-        private readonly ISessionAppService _sessionAppService;
+        private readonly IRewardDonationRepository _rewardDonationRepository;
+        private readonly IRepository<ReferralRewardTicket> _referralRewardTicketRepository;
+        private readonly IRepository<Referral> _referralRepository;
 
         public DonationAppService(IRepository<Package> packageRepository, IRepository<PackageType> packageTypeRepository
             , IRepository<DonationTicket> ticketRepository, IDonationRepository donationRepository, 
-            IRepository<User, long> userRepository , ISessionAppService sessionService)
+            IRepository<User, long> userRepository ,
+            IRepository<ReferralRewardTicket> referralRewardTicket, IRepository<Referral> referralRepository)
         {
             _packageTypeRepository = packageTypeRepository;
             _packageRepository = packageRepository;
             _ticketRepository = ticketRepository;
             _donationRepository = donationRepository;
             _userRepository = userRepository;
-            _sessionAppService = sessionService;
+            _referralRewardTicketRepository = referralRewardTicket;
+            _referralRepository = referralRepository;
         }
 
         [UnitOfWork(IsDisabled = true)]
@@ -112,19 +116,40 @@ namespace Peer2peer.Peering
                     Message = "The selected package cannot have more than " + expectedDonationCount + " donations"
                 };
             }
-            for (var i = 1; i <= expectedDonationCount; i++)
+            //create two ticket, 1 at 75 and the other at 100
+            _ticketRepository.Insert(new DonationTicket
             {
-                _ticketRepository.Insert(new DonationTicket
+                Amount = type.Price * 0.75,
+                DateCreated = Clock.Now,
+                PackageId = package.Id,
+                UserId = package.UserId,
+                Status = Status.Pending
+            });
+
+            _ticketRepository.Insert(new DonationTicket
+            {
+                Amount = type.Price,
+                DateCreated = Clock.Now,
+                PackageId = package.Id,
+                UserId = package.UserId,
+                Status = Status.Pending
+            });
+
+            package.Status = Status.TicketsCreated;
+
+            var referral = _referralRepository.FirstOrDefault(r => r.DownlineId == package.UserId);
+            if (referral != null)
+            {
+                //create a reward ticket for the upline
+                _referralRewardTicketRepository.Insert(new ReferralRewardTicket
                 {
-                    Amount = type.Price,
-                    DateCreated = Clock.Now,
-                    PackageId = package.Id,
-                    UserId = package.UserId,
+                    Amount = type.Price * 0.25,
+                    CreatedDate = Clock.Now,
+                    UserId = referral.UserId,
                     Status = Status.Pending
                 });
             }
-
-            package.Status = Status.TicketsCreated;
+           
 
             return new OutputResultDto
             {
@@ -160,11 +185,35 @@ namespace Peer2peer.Peering
             ticket.Status = Status.AwaitingPayment;
             ticket.DonationId = input.PackageId;
             _ticketRepository.Update(ticket);
+
+            if (ticket.Amount < 20000)
+            {
+                //create a reward donation
+                var nextRewardTicket = GetNextRewardTicketToMatch();
+
+                var ticketToMatch = nextRewardTicket.Success ? nextRewardTicket.Data : GetSystemTicket();
+                _rewardDonationRepository.Insert(new ReferralRewardDonation
+                {
+                    PackageId = input.PackageId,
+                    Status = Status.Pending,
+                    Amount = ticket.Amount,
+                    Date = Clock.Now,
+                    FromUserId = package.UserId,
+                    TicketId = ticketToMatch.Id,
+                    ToUserId = ticketToMatch.UserId
+                });
+            }
             
-            //mark donation as paired to avoid multi pairing of a donation
+            
+            //mark package as paired to avoid multi pairing of a donation
             package.Status = Status.Paired;
             _packageRepository.Update(package);
             return new OutputResultDto {Message = "Donation created for the given ticket and package", Success = true};
+        }
+
+        private ReferralRewardTicket GetSystemTicket()
+        {
+            throw new NotImplementedException();
         }
 
         public OutputResultDto RemoveTaledDonation(RemoveTaledDonationInput input)
@@ -190,20 +239,74 @@ namespace Peer2peer.Peering
 
         public OutputResultDto ChangeDonationStatus(ChangeDonationStatusInput input)
         {
-            var donation =
+            if (input.Type == "r")
+            {
+                var donation =
+                _rewardDonationRepository.FirstOrDefault(d => d.Id == input.DonationId && d.ToUserId == input.CurrentUserId);
+                if (donation == null)
+                {
+                    return new OutputResultDto { Message = "Invalid donation ID" };
+                }
+                donation.Status = input.Status;
+                _rewardDonationRepository.Update(donation);
+                return new OutputResultDto
+                {
+                    Message = input.Status == Status.AwaitingAlert ?
+                    "Donation marked as awaiting payment" : "Donation status changed",
+                    Success = true
+                };
+            }
+            else
+            {
+                var donation =
                 _donationRepository.FirstOrDefault(d => d.Id == input.DonationId && d.ToUserId == input.CurrentUserId);
+                if (donation == null)
+                {
+                    return new OutputResultDto { Message = "Invalid donation ID" };
+                }
+                donation.Status = input.Status;
+                _donationRepository.Update(donation);
+                return new OutputResultDto
+                {
+                    Message = input.Status == Status.AwaitingAlert ?
+                    "Donation marked as awaiting payment" : "Donation status changed",
+                    Success = true
+                };
+            }
+            
+        }
+
+        private OutputResultDto ConfirmRewardDonation(ConfirmDonationInput input)
+        {
+            var donation = _rewardDonationRepository.FirstOrDefault(d => d.Id == input.DonationId &&
+            d.ToUserId == input.CurrentUserId);
             if (donation == null)
             {
-                return new OutputResultDto {Message = "Invalid donation ID"};
+                return new OutputResultDto { Message = "Invalid Donation ID" };
             }
-            donation.Status = input.Status;
-            _donationRepository.Update(donation);
-            return new OutputResultDto {Message = input.Status == Status.AwaitingAlert?
-                "Donation marked as awaiting payment" : "Donation status changed", Success = true};
+            donation.Status = Status.PaidOut;
+            _rewardDonationRepository.Update(donation);
+
+            var ticket = _referralRewardTicketRepository.FirstOrDefault(t => t.Id == donation.TicketId);
+            //mark the ticket as paid out
+            ticket.Status = Status.PaidOut;
+            _referralRewardTicketRepository.InsertOrUpdateAndGetId(ticket);
+            
+            //if the actual donation for this package have been confirmed create tickets for the package
+            if (_donationRepository.GetAll().Any(d => d.PackageId == donation.PackageId && d.Status == Status.PaidOut))
+            {
+                var result = CreateDonationTicket(new CreateDonationTicketInput { PackageId = donation.PackageId });
+                if (!result.Success)
+                {
+                    //todo log ticket creation error
+                }
+            }
+            return new OutputResultDto { Message = "Thanks for confirming the donation", Success = true };
         }
 
         public OutputResultDto ConfirmDonation(ConfirmDonationInput input)
         {
+            if(input.Type == "r") return ConfirmRewardDonation(input);
             var donation = _donationRepository.FirstOrDefault(d => d.Id == input.DonationId &&
             d.ToUserId == input.CurrentUserId);
             if (donation == null)
@@ -227,10 +330,14 @@ namespace Peer2peer.Peering
             }
 
             //create tickets for the package
-            var result = CreateDonationTicket(new CreateDonationTicketInput {PackageId = donation.PackageId});
-            if (!result.Success)
+            //if the actual donation for this package have been confirmed create tickets for the package
+            if (_rewardDonationRepository.GetAll().Any(d => d.PackageId == donation.PackageId && d.Status == Status.PaidOut))
             {
-                //todo log ticket creation error
+                var result = CreateDonationTicket(new CreateDonationTicketInput { PackageId = donation.PackageId });
+                if (!result.Success)
+                {
+                    //todo log ticket creation error
+                }
             }
             return new OutputResultDto {Message = "Thanks for confirming the donation", Success = true};
         }
@@ -272,6 +379,31 @@ namespace Peer2peer.Peering
                 return new OutputResultDto<Package> {Success = false, Message = exception.Message};
             }
             
+        }
+
+        public OutputResultDto<ReferralRewardTicket> GetNextRewardTicketToMatch()
+        {
+            try
+            {
+                var ticket =
+                _referralRewardTicketRepository
+                    .GetAll().OrderBy(p => p.CreatedDate)
+                    .FirstOrDefault(p => p.Status == Status.Pending || p.Status == Status.UrgentPairingNeeded);
+
+                if (ticket == null) return new OutputResultDto<ReferralRewardTicket> {Data = ticket, Success = true};
+
+                var user = _userRepository.FirstOrDefault(u => u.Id == ticket.UserId);
+
+                if (user.IsActive) return new OutputResultDto<ReferralRewardTicket> {Data = ticket, Success = true};
+                ticket.Status = Status.InActive;
+                _referralRewardTicketRepository.InsertOrUpdateAndGetId(ticket);
+                return GetNextRewardTicketToMatch();
+            }
+            catch (Exception exception)
+            {
+                return new OutputResultDto<ReferralRewardTicket> { Success = false, Message = exception.Message };
+            }
+
         }
 
         public OutputResultDto MatchPackage(MatchPackageInput input)

@@ -54,3 +54,4 @@ C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Debug\Peer2peer.Migrat
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Debug\Peer2peer.Migrations.DonationPackage.resources
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Debug\Peer2peer.Migrations.TicketMAp.resources
 C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Debug\Peer2peer.Migrations.DonationPackageId.resources
+C:\websites\Peer2peerCSharp\Peer2peer.EntityFramework\obj\Debug\Peer2peer.Migrations.RewardTicket.resources

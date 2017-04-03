@@ -61,5 +61,7 @@ namespace Peer2peer.EntityFramework
         public IDbSet<PackageType> PackageTypes { get; set; }
         public IDbSet<Referral> Referrals { get; set; }
         public IDbSet<DonationTicket> DonationTickets { get; set; }
+        public IDbSet<ReferralRewardTicket> ReferralRewardTickets { get; set; }
+        public IDbSet<ReferralRewardDonation> ReferralRewardDonations { get; set; }
     }
 }

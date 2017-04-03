@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using Abp.Timing
 @using Abp.Web.Mvc.Extensions
+@using Peer2peer
 @{
     SetAntiForgeryCookie();
 }
@@ -16,7 +17,7 @@
 
     <link rel="shortcut icon" href="~/favicon.ico">
 
-    <title>Peer2peer</title>
+    <title>@AppConstants.AppName</title>
 
     @Styles.Render("~/Bundles/vendor/css")
     @Styles.Render("~/Bundles/css")

@@ -5,379 +5,568 @@
 }
 
 <div id="page-content-wrapper">
-    <div id="page-content">
+<div id="page-content">
 
-        <div class="container">
+<div class="container">
 
-            <!-- Sparklines charts -->
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/sparklines/sparklines.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/sparklines/sparklines-demo.js"></script>
-            <!-- Flot charts -->
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-resize.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-stack.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-pie.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-tooltip.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-demo-1.js"></script>
-            <!-- PieGage charts -->
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/piegage/piegage.js"></script>
-            <script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/piegage/piegage-demo.js"></script>
-        <div id="page-title">
-            <h2>Dashboard</h2>
-        </div>
+<!-- Sparklines charts -->
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/sparklines/sparklines.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/sparklines/sparklines-demo.js"></script>
+<!-- Flot charts -->
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-resize.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-stack.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-pie.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-tooltip.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/flot/flot-demo-1.js"></script>
+<!-- PieGage charts -->
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/piegage/piegage.js"></script>
+<script type="text/javascript" src="~/Content/monarch/assets/widgets/charts/piegage/piegage-demo.js"></script>
+        
+<div id="page-title">
+    <h2>Dashboard</h2>
+</div>
+
             
+<div class="panel">
+<div class="panel-body">
+        
+<div class="row">
+    <div class="col-md-12">
         <div class="panel">
             <div class="panel-body">
-                @if (Model.CircleCompleted)
-            {
-                    <div class="row">
-                        <div class="col-md-3">
-                            <a href="/cp/packages/create/basic" style="text-decoration: none;">
-                                <div class="tile-box bg-gray">
-                                    <div class="tile-header">
-                                        Donate 5000
-                                        <div class="float-right">
-                                            <i class="glyph-icon icon-caret-up"></i>
-                                            +200%
-                                        </div>
-                                    </div>
-                                    <div class="tile-content-wrapper">
-                                        <i class="glyph-icon icon-money"></i>
-                                        <div class="tile-content">
-                                            10,000
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                <h3 class="title-hero">
+                    My Downlines
+                </h3>
+                <p><b> Referral Link:
+                    <i>
+                        @Url.Action("Register", "Account",
+                            new { r = Model.CurrentUser.UserName, area = "" }, Request.Url.Scheme)
+                    </i></b></p>
 
-                        <div class="col-md-3">
-                            <a href="/cp/packages/create/bronze" style="text-decoration: none;">
-                                <div class="tile-box bg-red">
-                                    <div class="tile-header">
-                                        Donate 10,000
-                                        <div class="float-right">
-                                            <i class="glyph-icon icon-caret-up"></i>
-                                            +200%
-                                        </div>
-                                    </div>
-                                    <div class="tile-content-wrapper">
-                                        <i class="glyph-icon icon-money"></i>
-                                        <div class="tile-content">
-                                            20,000
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                            
+                <p>
+                    <b>Referral Code: <i>@Model.CurrentUser.UserName</i></b><br />
+                </p>
+                <p>Most money is made from referral. Make 25% (5,000) of every donation (20,000) 
+                    made by the people you refer to the system. 
+                    Please make sur they registeres with your code</p>
+                            
 
-                        <div class="col-md-3">
-                            <a href="/cp/packages/create/silver" style="text-decoration: none;">
-                                <div class="tile-box bg-blue">
-                                    <div class="tile-header">
-                                        Donate 20,000
-                                        <div class="float-right">
-                                            <i class="glyph-icon icon-caret-up"></i>
-                                            +200%
-                                        </div>
-                                    </div>
-                                    <div class="tile-content-wrapper">
-                                        <i class="glyph-icon icon-money"></i>
-                                        <div class="tile-content">
-                                            40,000
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                <div class="example-box-wrapper">
+                    @if (Model.Downlines.Count > 0)
+                    {
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Join Date</th>
+                                <th>Phone number</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
 
+                            <tbody>
+                            @{ var no = 1; }
+                            @foreach (var user in Model.Downlines)
+                            {
+                                <tr>
+                                    <td>@(no++)</td>
+                                    <td>@user.Name</td>
+                                    <td>@user.CreationTime.ToLongDateString()</td>
+                                    <td>@user.PhoneNumber</td>
+                                    <td>@user.Status</td>
+                                </tr>
 
-                        <div class="col-md-3">
-                            <a href="/cp/packages/create/gold" style="text-decoration: none;">
-                                <div class="tile-box bg-green">
-                                    <div class="tile-header">
-                                        Donate 50,000
-                                        <div class="float-right">
-                                            <i class="glyph-icon icon-caret-up"></i>
-                                            +200%
-                                        </div>
-                                    </div>
-                                    <div class="tile-content-wrapper">
-                                        <i class="glyph-icon icon-money"></i>
-                                        <div class="tile-content">
-                                            100,000
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                            }
+                            </tbody>
 
-                    </div>
-                }
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="font-red" style="font-size: 16px">You have not invited anyone to the platform. You are really missing lots of 5,000</p>
+                    }
 
-                @if (Model.PendingDonation != null)
-            {
-                    <div class="row">
-                        <div class="content-box border-top border-red">
-                            <h3 class="content-box-header clearfix">
-                                Account Donation Payment. 
-                                <small>Donation Penalty</small>
-                                <span class="btn-group btn-group-sm float-right" data-toggle="buttons">
-                                    <a href="#" class="btn btn-primary">
-                                        <input type="radio" name="test-toggle-radio">
-                                        <i class="glyph-icon icon-edit"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-primary">
-                                        <input type="radio" name="test-toggle-radio">
-                                        <i class="glyph-icon icon-bar-chart-o"></i>
-                                    </a>
-                                </span>
-                            </h3>
-
-                            <div class="content-box-wrapper">
-                                <article class="row">
-                                    <section class="col-md-6">
-                                        <section class="count-down-clock">
-                                            <section class="row">
-
-                                                <div class="col-md-2 visible-lg text-center">
-                                                    <i class="fa fa-clock-o" style="color:#047d45; font-size: 150px;"></i>
-                                                </div>
-                                                <div class="col-md-10 col-sm-12  col-xm-12">
-                                                    <div id="clockdiv-success">
-                                                        <div>
-
-                                                            <span class="days animated infinite">
-                                                                Remaining: @Model.PendingDonation.TimeLeft<br>
-                                                                <span style="font-size: 18px;">Penalty: @Model.PendingDonation.PenaltyDateTime</span>
-                                                            </span>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        </section>
-                                    </section>
-                                    <section class="col-md-6">
-                                        <article class="row">
-                                            <section class="col-md-2">
-                                                <img class="margin-top-20 img-responsive img-circle img-thumbnail" 
-                                                     alt="User Image" src="@Url.Content("~/Content/img/member.jpg")">
-                                            </section>
-                                            <section class="col-md-10">
-                                                <article class="row">
-
-                                                    <section class="col-md-6">
-                                                        <h3>Beneficiary Profile</h3>
-                                                        <p>Name: @Model.PendingDonation.ToUser.FullName</p>
-                                                        <p>Phone Number: @Model.PendingDonation.ToUser.PhoneNumber</p>
-                                                        <h3>Amount: ₦@Model.PendingDonation.Amount</h3>
-                                                    </section>
-                                                    <section class="col-md-6">
-                                                        <h3>Beneficiary Bank Details</h3>
-                                                        <p>Account Name: @Model.PendingDonation.ToUser.AccountName</p>
-                                                        <p>Account Number: <b> @Model.PendingDonation.ToUser.AccountNumber</b></p>
-                                                        <p>Bank Name: @Model.PendingDonation.ToUser.BankName</p>
-                                                    </section>
-                                                </article>
-                                            </section>
-                                        </article>
-                                    </section>
-                                </article>
-
-                            </div>
-                        </div>
-                    </div>
-
-                }
-                
-                @if (Model.PendingConfirmations.Count > 0)
-                {
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel">
-                                <div class="panel-body">
-                                    <h3 class="title-hero">
-                                        Pending Payments
-                                    </h3>
-                                    <div class="example-box-wrapper">
-                                        <table class="table table-condensed">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Date</th>
-                                                <th>Amount</th>
-                                                <th>Phone</th>
-                                                <th>Status</th>
-                                                <th></th>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody>
-                                            @{ var sn = 1; }
-                                            @foreach (var package in Model.PendingConfirmations)
-                                            {
-                                                <tr>
-                                                    <td>@(sn++)</td>
-                                                    <td>@package.FromName</td>
-                                                    <td>@package.Date.ToShortDateString()</td>
-                                                    <td>@package.Amount</td>
-                                                    <td>@package.FromPhoneNumber</td>
-                                                    <td>@package.Status</td>
-                                                    <td>
-                                                        <a href="@Url.Action("Confirm", "Packages", new {area = "cp", donationId = package.DonationId})" class="btn btn-block btn-primary">Confirm</a>
-                                                        @if (package.Status == Status.Pending)
-                                                        {
-                                                            <a href="@Url.Action("ChangeStatus", "Packages", new
-                                                                     {
-                                                                         area = "cp", donationId = package.DonationId,
-                                                                         status = Status.AwaitingAlert
-                                                                     })" class="btn btn-block btn-danger">Mark as Awaiting Alert</a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a href="@Url.Action("ChangeStatus", "Packages", new
-                                                                     {
-                                                                         area = "cp",
-                                                                         donationId = package.DonationId, status = Status.Pending
-                                                                     })" class="btn btn-block btn-danger">Mark as Pending</a>
-                                                        }
-
-
-                                                    </td>
-                                                </tr>
-
-                                            }
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                }
-                      
-                <div class="panel">
-                    <div class="panel-body">
-                        <h3 class="title-hero">
-                            Income Stat
-                        </h3>
-                        <div class="example-box-wrapper">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <a href="#" title="Donations Maed" class="tile-box btn btn-primary">
-                                        <div class="tile-header">
-                                            Donations Made
-                                            <div class="float-right">
-                                                <i class="glyph-icon icon-caret-up"></i>
-                                                @Model.GetPercentage("tdm")%
-                                            </div>
-                                        </div>
-                                        <div class="tile-content-wrapper">
-                                            <i class="glyph-icon icon-retweet"></i>
-                                            <div class="tile-content">
-                                                <span>₦</span>
-                                                @Model.TotalDonationMade
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-md-4">
-                                    <a href="#" title="Example box" class="tile-box btn bg-white content-box">
-                                        <div class="tile-header">
-                                            Donations Received
-                                            <div class="float-right">
-                                                <i class="glyph-icon icon-caret-up"></i>
-                                                @Model.GetPercentage("tdr")%
-                                            </div>
-                                        </div>
-                                        <div class="tile-content-wrapper">
-                                            <i class="glyph-icon icon-university"></i>
-                                            <div class="tile-content">
-                                                <span>₦</span>
-                                                @Model.TotalDonatioReceived
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-md-4">
-                                    <a href="#" title="Profit" class="tile-box btn btn-danger">
-                                        <div class="tile-header">
-                                            Profit
-                                            <div class="float-right">
-                                                <i class="glyph-icon icon-caret-up"></i>
-                                                @Model.GetPercentage("pft")%
-                                            </div>
-                                        </div>
-                                        <div class="tile-content-wrapper">
-                                            <i class="glyph-icon icon-dashboard"></i>
-                                            <div class="tile-content">
-                                                <span>₦</span>@Model.Profit
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                                          
-            @if (Model.Transactions.Count > 0)
-                {
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="panel">
-                                <div class="panel-body">
-                                    <h3 class="title-hero">
-                                        My Donations
-                                    </h3>
-                                    <div class="example-box-wrapper">
-                                        <table class="table table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>From</th>
-                                                    <th>Date</th>
-                                                    <th>Amount</th>
-                                                    <th>To</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                @{ var sn = 1; }
-                                                @foreach (var package in Model.Transactions)
-                                                {
-                                                    <tr class="@(package.IsIncoming? "bg-green text-white":"")">
-                                                        <td>@(sn++)</td>
-                                                        <td>@package.FromName</td>
-                                                        <td>@package.Date.ToShortTimeString() @package.Date.ToLongDateString()</td>
-                                                        <td>@package.Amount</td>
-                                                        <td>@package.ToName</td>
-                                                        <td>@package.Status</td>
-                                                    </tr>
-
-                                                }
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                                                    }
             </div>
-        </div>
-            
-      
         </div>
 
     </div>
+            
+           
+</div>
+
+
+
+@if (Model.CircleCompleted)
+{
+    <div class="row">
+        <div class="col-md-3">
+            <a href="/cp/packages/create/basic" style="text-decoration: none;">
+                <div class="tile-box bg-gray">
+                    <div class="tile-header">
+                        Donate 5000
+                        <div class="float-right">
+                            <i class="glyph-icon icon-caret-up"></i>
+                            +200%
+                        </div>
+                    </div>
+                    <div class="tile-content-wrapper">
+                        <i class="glyph-icon icon-money"></i>
+                        <div class="tile-content">
+                            10,000
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="/cp/packages/create/bronze" style="text-decoration: none;">
+                <div class="tile-box bg-red">
+                    <div class="tile-header">
+                        Donate 10,000
+                        <div class="float-right">
+                            <i class="glyph-icon icon-caret-up"></i>
+                            +200%
+                        </div>
+                    </div>
+                    <div class="tile-content-wrapper">
+                        <i class="glyph-icon icon-money"></i>
+                        <div class="tile-content">
+                            20,000
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="/cp/packages/create/silver" style="text-decoration: none;">
+                <div class="tile-box bg-blue">
+                    <div class="tile-header">
+                        Donate 20,000
+                        <div class="float-right">
+                            <i class="glyph-icon icon-caret-up"></i>
+                            +200%
+                        </div>
+                    </div>
+                    <div class="tile-content-wrapper">
+                        <i class="glyph-icon icon-money"></i>
+                        <div class="tile-content">
+                            40,000
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="col-md-3">
+            <a href="/cp/packages/create/gold" style="text-decoration: none;">
+                <div class="tile-box bg-green">
+                    <div class="tile-header">
+                        Donate 50,000
+                        <div class="float-right">
+                            <i class="glyph-icon icon-caret-up"></i>
+                            +200%
+                        </div>
+                    </div>
+                    <div class="tile-content-wrapper">
+                        <i class="glyph-icon icon-money"></i>
+                        <div class="tile-content">
+                            100,000
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+}
+
+@if (Model.PendingDonation != null)
+{
+    <div class="row">
+        <div class="content-box border-top border-red">
+            <h3 class="content-box-header clearfix">
+                Account Donation Payment.
+                <small>Donation Penalty</small>
+                <span class="btn-group btn-group-sm float-right" data-toggle="buttons">
+                    <a href="#" class="btn btn-primary">
+                        <input type="radio" name="test-toggle-radio">
+                        <i class="glyph-icon icon-edit"></i>
+                    </a>
+                    <a href="#" class="btn btn-primary">
+                        <input type="radio" name="test-toggle-radio">
+                        <i class="glyph-icon icon-bar-chart-o"></i>
+                    </a>
+                </span>
+            </h3>
+
+            <div class="content-box-wrapper">
+                <article class="row">
+                    <section class="col-md-6">
+                        <section class="count-down-clock">
+                            <section class="row">
+
+                                <div class="col-md-2 visible-lg text-center">
+                                    <i class="fa fa-clock-o" style="color: #047d45; font-size: 150px;"></i>
+                                </div>
+                                <div class="col-md-10 col-sm-12  col-xm-12">
+                                    <div id="clockdiv-success">
+                                        <div>
+
+                                            <span class="days animated infinite">
+                                                Remaining: @Model.PendingDonation.TimeLeft<br>
+                                                <span style="font-size: 18px;">Penalty: @Model.PendingDonation.PenaltyDateTime</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+                    </section>
+                    <section class="col-md-6">
+                        <article class="row">
+                            <section class="col-md-2">
+                                <img class="margin-top-20 img-responsive img-circle img-thumbnail"
+                                     alt="User Image" src="@Url.Content("~/Content/img/member.jpg")">
+                            </section>
+                            <section class="col-md-10">
+                                <article class="row">
+
+                                    <section class="col-md-6">
+                                        <h3>Beneficiary Profile</h3>
+                                        <p>Name: @Model.PendingDonation.ToUser.FullName</p>
+                                        <p>Phone Number: @Model.PendingDonation.ToUser.PhoneNumber</p>
+                                        <h3>Amount: ₦@Model.PendingDonation.Amount</h3>
+                                    </section>
+                                    <section class="col-md-6">
+                                        <h3>Beneficiary Bank Details</h3>
+                                        <p>Account Name: @Model.PendingDonation.ToUser.AccountName</p>
+                                        <p>Account Number: <b> @Model.PendingDonation.ToUser.AccountNumber</b>
+                                        </p>
+                                        <p>Bank Name: @Model.PendingDonation.ToUser.BankName</p>
+                                    </section>
+                                </article>
+                            </section>
+                        </article>
+                    </section>
+                </article>
+
+            </div>
+        </div>
+    </div>
+
+}
+        
+@if (Model.PendingRewardDonation != null)
+{
+    <div class="row">
+        <div class="content-box border-top border-red">
+            <h3 class="content-box-header clearfix">
+                Account Donation Payment.
+                <small>Donation Penalty</small>
+                <span class="btn-group btn-group-sm float-right" data-toggle="buttons">
+                    <a href="#" class="btn btn-primary">
+                        <input type="radio" name="test-toggle-radio">
+                        <i class="glyph-icon icon-edit"></i>
+                    </a>
+                    <a href="#" class="btn btn-primary">
+                        <input type="radio" name="test-toggle-radio">
+                        <i class="glyph-icon icon-bar-chart-o"></i>
+                    </a>
+                </span>
+            </h3>
+
+            <div class="content-box-wrapper">
+                <article class="row">
+                    <section class="col-md-6">
+                        <section class="count-down-clock">
+                            <section class="row">
+
+                                <div class="col-md-2 visible-lg text-center">
+                                    <i class="fa fa-clock-o" style="color: #047d45; font-size: 150px;"></i>
+                                </div>
+                                <div class="col-md-10 col-sm-12  col-xm-12">
+                                    <div id="clockdiv-success">
+                                        <div>
+
+                                            <span class="days animated infinite">
+                                                Remaining: @Model.PendingRewardDonation.TimeLeft<br>
+                                                <span style="font-size: 18px;">Penalty: @Model.PendingRewardDonation.PenaltyDateTime</span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+                    </section>
+                    <section class="col-md-6">
+                        <article class="row">
+                            <section class="col-md-2">
+                                <img class="margin-top-20 img-responsive img-circle img-thumbnail"
+                                     alt="User Image" src="@Url.Content("~/Content/img/member.jpg")">
+                            </section>
+                            <section class="col-md-10">
+                                <article class="row">
+
+                                    <section class="col-md-6">
+                                        <h3>Beneficiary Profile</h3>
+                                        <p>Name: @Model.PendingRewardDonation.ToUser.FullName</p>
+                                        <p>Phone Number: @Model.PendingRewardDonation.ToUser.PhoneNumber</p>
+                                        <h3>Amount: ₦@Model.PendingRewardDonation.Amount</h3>
+                                    </section>
+                                    <section class="col-md-6">
+                                        <h3>Beneficiary Bank Details</h3>
+                                        <p>Account Name: @Model.PendingRewardDonation.ToUser.AccountName</p>
+                                        <p>
+                                            Account Number: <b> @Model.PendingRewardDonation.ToUser.AccountNumber</b>
+                                        </p>
+                                        <p>Bank Name: @Model.PendingRewardDonation.ToUser.BankName</p>
+                                    </section>
+                                </article>
+                            </section>
+                        </article>
+                    </section>
+                </article>
+
+            </div>
+        </div>
+    </div>
+
+}
+
+@if (Model.PendingConfirmations.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <h3 class="title-hero">
+                        Pending Payments
+                    </h3>
+                    <div class="example-box-wrapper">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @{ var sn = 1; }
+                            @foreach (var package in Model.PendingConfirmations)
+                            {
+                                <tr>
+                                    <td>@(sn++)</td>
+                                    <td>Package Payment</td>
+                                    <td>@package.FromName</td>
+                                    <td>@package.Date.ToShortDateString()</td>
+                                    <td>@package.Amount</td>
+                                    <td>@package.FromPhoneNumber</td>
+                                    <td>@package.Status</td>
+                                    <td>
+                                        <a href="@Url.Action("Confirm", "Packages", new {area = "cp", donationId = package.DonationId})" class="btn btn-block btn-primary">Confirm</a>
+                                        @if (package.Status == Status.Pending)
+                                        {
+                                            <a href="@Url.Action("ChangeStatus", "Packages", new
+                                                     {
+                                                         area = "cp", donationId = package.DonationId,
+                                                         status = Status.AwaitingAlert
+                                                     })" class="btn btn-block btn-danger">Mark as Awaiting Alert</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("ChangeStatus", "Packages", new
+                                                     {
+                                                         area = "cp",
+                                                         donationId = package.DonationId, status = Status.Pending
+                                                     })" class="btn btn-block btn-danger">Mark as Pending</a>
+                                        }
+
+
+                                    </td>
+                                </tr>
+
+                            }
+
+                            @foreach (var package in Model.ReferralPendingConfirmations)
+                            {
+                                <tr>
+                                    <td>@(sn++)</td>
+                                    <td>Reward Payment</td>
+                                    <td>@package.FromName</td>
+                                    <td>@package.Date.ToShortDateString()</td>
+                                    <td>@package.Amount</td>
+                                    <td>@package.FromPhoneNumber</td>
+                                    <td>@package.Status</td>
+                                    <td>
+                                        <a href="@Url.Action("Confirm", "Packages", new {area = "cp",
+                                                     donationId = package.DonationId, t="r"})" class="btn btn-block btn-primary">Confirm</a>
+                                        @if (package.Status == Status.Pending)
+                                        {
+                                            <a href="@Url.Action("ChangeStatus", "Packages", new
+                                                     {
+                                                         area = "cp", donationId = package.DonationId,
+                                                         status = Status.AwaitingAlert, t="r"
+                                                     })" class="btn btn-block btn-danger">Mark as Awaiting Alert</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("ChangeStatus", "Packages", new
+                                                     {
+                                                         area = "cp", t="r",
+                                                         donationId = package.DonationId, status = Status.Pending
+                                                     })" class="btn btn-block btn-danger">Mark as Pending</a>
+                                        }
+
+
+                                    </td>
+                                </tr>
+
+                            }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <h3 class="title-hero">
+            Income Stat
+        </h3>
+        <div class="example-box-wrapper">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="#" title="Donations Maed" class="tile-box btn btn-primary">
+                        <div class="tile-header">
+                            Donations Made
+                            <div class="float-right">
+                                <i class="glyph-icon icon-caret-up"></i>
+                                @Model.GetPercentage("tdm")%
+                            </div>
+                        </div>
+                        <div class="tile-content-wrapper">
+                            <i class="glyph-icon icon-retweet"></i>
+                            <div class="tile-content">
+                                <span>₦</span>
+                                @Model.TotalDonationMade
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" title="Example box" class="tile-box btn bg-white content-box">
+                        <div class="tile-header">
+                            Donations Received
+                            <div class="float-right">
+                                <i class="glyph-icon icon-caret-up"></i>
+                                @Model.GetPercentage("tdr")%
+                            </div>
+                        </div>
+                        <div class="tile-content-wrapper">
+                            <i class="glyph-icon icon-university"></i>
+                            <div class="tile-content">
+                                <span>₦</span>
+                                @Model.TotalDonatioReceived
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#" title="Profit" class="tile-box btn btn-danger">
+                        <div class="tile-header">
+                            Profit
+                            <div class="float-right">
+                                <i class="glyph-icon icon-caret-up"></i>
+                                @Model.GetPercentage("pft")%
+                            </div>
+                        </div>
+                        <div class="tile-content-wrapper">
+                            <i class="glyph-icon icon-dashboard"></i>
+                            <div class="tile-content">
+                                <span>₦</span>@Model.Profit
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.Transactions.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-body">
+                    <h3 class="title-hero">
+                        My Donations
+                    </h3>
+                    <div class="example-box-wrapper">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>From</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>To</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @{ var sn = 1; }
+                            @foreach (var package in Model.Transactions)
+                            {
+                                <tr class="@(package.IsIncoming ? "bg-green text-white" : "")">
+                                    <td>@(sn++)</td>
+                                    <td>@package.FromName</td>
+                                    <td>@package.Date.ToShortTimeString() @package.Date.ToLongDateString()</td>
+                                    <td>@package.Amount</td>
+                                    <td>@package.ToName</td>
+                                    <td>@package.Status</td>
+                                </tr>
+
+                            }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+</div>
+</div>
+            
+      
+</div>
+
+</div>
 </div>

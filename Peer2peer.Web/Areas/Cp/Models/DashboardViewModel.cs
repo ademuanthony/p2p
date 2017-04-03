@@ -2,22 +2,33 @@
 using Peer2peer.Dos;
 using System.Collections.Generic;
 using System.Linq;
+using Peer2peer.Users;
 
 namespace Peer2peer.Web.Areas.Cp.Models
 {
     public class DashboardViewModel
     {
-        public bool CircleCompleted => PendingConfirmations != null && PendingConfirmations.Count == 0 && PendingPackage == null;
+        public User CurrentUser { get; set; }
+
+        public bool CircleCompleted => PendingConfirmations != null &&
+                                       PendingConfirmations.Count == 0 && PendingPackage == null &&
+                                       PendingRewardDonation == null;
 
         public List<Transaction> PendingConfirmations { get; set; }
         public List<Transaction> Transactions { get; set; }
         public Donation PendingDonation { get; set; }
+        public ReferralRewardDonation PendingRewardDonation { get; set; }
         public Package PendingPackage { get; set; }
         public Dictionary<string, PackageType> PackageTypes { get; set; }
 
         public double TotalDonationMade { get { return Transactions.Where(t => !t.IsIncoming).Sum(t => t.Amount); } }
         public double TotalDonatioReceived { get { return Transactions.Where(t => t.IsIncoming).Sum(t => t.Amount); } }
         public double Profit => TotalDonatioReceived - TotalDonationMade > 0 ? TotalDonatioReceived - TotalDonationMade:0;
+
+        public List<User> Downlines { get; set; }
+        public List<Transaction> ReferralPendingConfirmations { get; set; }
+
+    
 
         public int GetPercentage(string item)
         {

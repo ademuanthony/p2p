@@ -51,6 +51,8 @@ namespace Peer2peer.Web.Models.Account
         public string Status { get; set; }
         public int Circel { get; set; }
 
+        public string ReferalCode { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var emailRegex = new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");

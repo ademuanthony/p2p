@@ -14,5 +14,6 @@ namespace Peer2peer.Peering.Dto
         [Required]
         public long CurrentUserId { get; set; }
         public string Status { get; set; }
+        public string Type { get; set; }
     }
 }

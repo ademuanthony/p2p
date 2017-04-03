@@ -10,5 +10,6 @@ namespace Peer2peer.Peering.Dto
     {
         public long CurrentUserId { get; set; }
         public int DonationId { get; set; }
+        public string Type { get; set; }
     }
 }

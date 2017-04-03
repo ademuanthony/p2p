@@ -28,3 +28,4 @@ C:\websites\Peer2peerCSharp\Peer2peer.Core\bin\Release\Nito.AsyncEx.Enlightenmen
 C:\websites\Peer2peerCSharp\Peer2peer.Core\bin\Release\System.Collections.Immutable.xml
 C:\websites\Peer2peerCSharp\Peer2peer.Core\obj\Release\Peer2peer.Core.dll
 C:\websites\Peer2peerCSharp\Peer2peer.Core\obj\Release\Peer2peer.Core.pdb
+C:\websites\Peer2peerCSharp\Peer2peer.Core\obj\Release\Peer2peer.Core.csprojResolveAssemblyReference.cache
